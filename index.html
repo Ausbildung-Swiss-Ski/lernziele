@@ -1,0 +1,1054 @@
+<!doctype html>
+<html lang="de">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Lernziele</title>
+<style>
+:root{
+  --red:#DE0019; --ink:#000; --muted:#595959; --line:#D9D9D9; --soft:#F4F4F4;
+  --k:#DE0019; --l:#595959; --bg:#fff;
+}
+*{box-sizing:border-box}
+html,body{margin:0}
+body{
+  font-family:Aptos, "Segoe UI", Arial, Helvetica, sans-serif; color:var(--ink);
+  background:
+    radial-gradient(ellipse 70% 60% at 100% 100%, rgba(222,0,25,.16), transparent 70%),
+    radial-gradient(ellipse 60% 50% at 0% 100%, rgba(222,0,25,.05), transparent 70%),
+    var(--bg);
+  background-attachment:fixed; min-height:100vh;
+}
+.wrap{max-width:1200px;margin:0 auto;padding:32px 48px 64px}
+header{display:flex;justify-content:space-between;align-items:flex-start;gap:24px}
+h1{font-family:"Aptos Display",Aptos,"Segoe UI",Arial,sans-serif;font-weight:800;font-size:clamp(26px,3.4vw,42px);letter-spacing:-.01em;margin:0;line-height:1.1}
+.sub{color:var(--muted);font-size:14px;margin-top:8px}
+.logo{flex-shrink:0}
+.logo svg{width:120px;height:auto;display:block;margin-top:6px;overflow:visible}
+
+/* controls */
+.controls{display:flex;flex-wrap:wrap;gap:24px;align-items:center;margin:28px 0 10px;padding-bottom:14px;border-bottom:1px solid var(--line)}
+.ctl-label{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--muted);margin-right:8px;font-weight:700}
+.seg{display:inline-flex;border:1px solid var(--line);border-radius:999px;overflow:hidden;background:#fff}
+.seg button{white-space:nowrap;border:0;background:transparent;padding:8px 16px;font:inherit;font-size:13px;font-weight:700;cursor:pointer;color:var(--ink)}
+.seg button+button{border-left:1px solid var(--line)}
+.seg button[aria-pressed=true]{background:var(--red);color:#fff}
+.seg button:focus-visible{outline:2px solid var(--red);outline-offset:-3px}
+.search{border:1px solid var(--line);border-radius:999px;padding:8px 14px;font:inherit;font-size:13px;min-width:200px;background:#fff}
+
+/* legend */
+.legend{display:flex;flex-wrap:wrap;gap:18px;color:var(--muted);font-size:12px;margin:10px 0 18px}
+.legend span{display:inline-flex;align-items:center;gap:6px}
+
+/* badges */
+.b{font-style:normal;display:inline-flex;align-items:center;justify-content:center;min-width:22px;height:22px;padding:0 6px;border-radius:4px;font-size:11px;font-weight:800;line-height:1}
+.b.K{background:var(--k);color:#fff}
+.b.L{background:#fff;color:var(--l);border:1.5px solid var(--l)}
+.b.N{color:#bbb;background:transparent;border:1px dashed #ccc}
+.b.O{color:var(--muted);background:var(--soft);border:1px dashed #bbb;font-weight:600}
+.b small{font-weight:600;margin-left:3px;font-size:10px}
+
+/* comparison grid */
+.grid{width:100%;border-collapse:collapse}
+.grid th{color:var(--red);font-size:12px;font-weight:700;text-align:left;padding:10px 8px;border-top:1px solid var(--line);border-bottom:1px solid var(--line)}
+.grid th .lvl{display:block;color:var(--ink);font-size:16px;font-weight:800;margin-bottom:2px}
+.grid th .discs{display:grid;grid-template-columns:repeat(4,1fr);gap:4px;color:var(--red);font-size:10.5px;margin-top:6px}
+.grid td{border-bottom:1px solid var(--line);padding:9px 8px;vertical-align:middle;font-size:13px}
+.grid td.arrow{width:44px;text-align:center;color:var(--red);font-weight:800}
+.grid tr.row{cursor:pointer;transition:background .15s}
+.grid tr.row:hover{background:rgba(222,0,25,.04)}
+.grid tr.row:focus-visible{outline:2px solid var(--red);outline-offset:-2px}
+.cell{display:grid;grid-template-columns:minmax(0,1fr) auto;gap:10px;align-items:center}
+.cell .name{font-weight:700}
+.cell .name .note{display:block;font-weight:400;color:var(--muted);font-size:11.5px;margin-top:2px}
+.dots{display:grid;grid-template-columns:repeat(4,30px);gap:4px;justify-items:center}
+.absent{color:#aaa;font-style:italic;font-size:12px}
+.zoomhint{opacity:0;color:var(--red);font-size:16px;transition:opacity .15s;padding-left:4px}
+tr.row:hover .zoomhint{opacity:1}
+.fill{display:inline-block;width:36px;height:4px;background:var(--line);border-radius:2px;overflow:hidden;vertical-align:middle;margin-left:6px}
+.fill i{display:block;height:100%;background:var(--red)}
+.sumrow{display:flex;gap:28px;flex-wrap:wrap;margin:22px 0 0;font-size:12.5px;color:var(--muted)}
+.sumrow b{color:var(--ink);font-size:20px;display:block;font-weight:800}
+
+/* zoom overlay */
+.overlay{position:fixed;inset:0;background:rgba(255,255,255,.55);backdrop-filter:blur(3px);display:none;z-index:10}
+.overlay.open{display:block}
+.panel{position:fixed;inset:24px;max-width:1150px;margin:0 auto;background:#fff;border:1px solid var(--line);border-radius:10px;box-shadow:0 20px 60px rgba(0,0,0,.18);display:flex;flex-direction:column;overflow:hidden;transform-origin:var(--ox,50%) var(--oy,50%);animation:zoom .28s cubic-bezier(.2,.8,.2,1)}
+@keyframes zoom{from{transform:scale(.4);opacity:0}to{transform:scale(1);opacity:1}}
+.panel-head{padding:22px 28px 16px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;gap:16px;align-items:flex-start;
+  background:radial-gradient(ellipse 60% 120% at 100% 0%, rgba(222,0,25,.10), transparent 70%),#fff}
+.crumb{font-size:11px;text-transform:uppercase;letter-spacing:.08em;color:var(--red);font-weight:700}
+.panel-head h2{margin:4px 0 0;font-size:clamp(20px,2.4vw,30px);font-weight:800;line-height:1.15}
+.navbtns{display:flex;gap:6px;flex-shrink:0}
+.navbtns button{border:1px solid var(--line);background:#fff;border-radius:999px;width:36px;height:36px;font-size:16px;cursor:pointer}
+.navbtns button:hover{border-color:var(--red);color:var(--red)}
+.panel-body{overflow:auto;padding:22px 28px 28px;display:grid;grid-template-columns:1fr 1fr;gap:28px}
+.lvlcol h3{margin:0 0 4px;font-size:17px;font-weight:800;display:flex;align-items:center;gap:10px;min-width:0}
+.lvlcol h3 .nm{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-width:0}
+.lvlcol h3 .tag{flex-shrink:0}
+.lvlcol h3 .tag{font-size:10px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:#fff;background:var(--ink);padding:3px 7px;border-radius:3px}
+.lvlcol.ls h3 .tag{background:var(--red)}
+.lvlcol .tname{color:var(--muted);font-size:13px;margin-bottom:14px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.lvlcol{min-width:0}
+.prio{display:grid;grid-auto-flow:column;grid-auto-columns:1fr;border:1px solid var(--line);border-radius:6px;overflow:hidden;margin-bottom:18px}
+.prio div{padding:8px 4px;text-align:center;font-size:10.5px;color:var(--red);font-weight:700;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.prio div.sel{background:rgba(222,0,25,.06)}
+.prio div+div{border-left:1px solid var(--line)}
+.prio div .b{margin-top:6px}
+.field{border-top:1px solid var(--line);padding:12px 0}
+.field .fl{font-size:11px;text-transform:uppercase;letter-spacing:.07em;font-weight:700;color:var(--red);display:flex;justify-content:space-between;gap:8px}
+.field .fv{margin-top:6px;font-size:14px;line-height:1.5;white-space:pre-line}
+.field .fv.empty{color:#aaa;font-style:italic}
+.links{list-style:none;padding-left:0!important}
+.links li{padding:3px 0}
+.links a{color:var(--ink);text-decoration:none;border-bottom:1px solid var(--red);font-weight:600}
+.links a::before{content:"↗ ";color:var(--red);font-weight:800}
+.links a:hover{color:var(--red)}
+.langtag{font-size:10px;font-weight:700;color:#1F5FA8;background:#E8F0FA;border-radius:3px;padding:1px 6px;margin-left:6px;vertical-align:1px;white-space:nowrap}
+.rem{margin-top:6px;font-size:13.5px;line-height:1.45;padding:7px 10px;background:var(--soft);border-radius:5px}
+.rem span{display:inline-block;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin-right:8px}
+.rem.empty{color:#aaa}
+.pts li{margin-bottom:8px}
+.pts b{font-weight:700}
+.stufe{display:inline-block;font-size:10.5px;font-weight:700;color:var(--muted);background:var(--soft);border-radius:3px;padding:1px 6px;margin-left:4px;vertical-align:1px;white-space:nowrap}
+.sublbl{margin-top:12px;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted)}
+.field .fl{white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.field ul{margin:6px 0 0;padding-left:18px;font-size:14px;line-height:1.5}
+.status{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:999px;text-transform:none;letter-spacing:0}
+.status.ja{background:#E7F4EA;color:#1E7B34}
+.status.teilweise{background:#FFF4DC;color:#8A5A00}
+.status.nein{background:#FDE4E7;color:var(--red)}
+.status.offen{background:var(--soft);color:var(--muted)}
+.notpart{border:1px dashed var(--line);border-radius:8px;padding:28px;color:var(--muted);font-size:14px;text-align:center}
+.navbtns .close{border:0;width:auto;background:var(--ink);color:#fff;border-radius:999px;padding:0 14px;height:36px;cursor:pointer;font:inherit;font-size:13px;font-weight:700}
+.progression{grid-column:1/-1;border:1px solid var(--line);border-radius:8px;padding:14px 18px;background:#FCFCFC}
+.progression .fl{font-size:11px;text-transform:uppercase;letter-spacing:.07em;font-weight:700;color:var(--red)}
+.progression .fv{margin-top:6px;font-size:14px;line-height:1.5}
+.progression .fv.empty{color:#aaa;font-style:italic}
+footer{margin-top:30px;color:var(--muted);font-size:11.5px}
+
+@media (max-width:860px){
+  .wrap{padding:20px 16px 48px}
+  .grid thead{display:none}
+  .grid,.grid tbody,.grid tr,.grid td{display:block;width:100%}
+  .grid tr.row{border-bottom:1px solid var(--line);padding:6px 0}
+  .grid td{border:0;padding:6px 0}
+  .grid td.arrow{display:none}
+  .grid td[data-lvl]::before{content:attr(data-lvl);display:block;font-size:10px;text-transform:uppercase;letter-spacing:.08em;color:var(--red);font-weight:700;margin-bottom:4px}
+  .panel{inset:8px}
+  .panel-body{grid-template-columns:1fr;padding:16px}
+  .panel-head{padding:16px}
+  .logo svg{width:80px}
+  .seg{max-width:calc(100vw - 32px);overflow-x:auto}
+  .controls>div{max-width:100%}
+}
+/* editor */
+.editctl{margin-left:auto;display:flex;align-items:center;gap:8px}
+.pill{border:1px solid var(--line);background:#fff;border-radius:999px;padding:0 14px;height:36px;font:inherit;font-size:13px;font-weight:700;cursor:pointer;color:var(--ink);white-space:nowrap}
+.pill:hover{border-color:var(--red);color:var(--red)}
+.pill.on,.pill[aria-pressed=true]{background:var(--ink);color:#fff;border-color:var(--ink)}
+.pill.save{background:var(--red);color:#fff;border-color:var(--red)}
+.pill.save:disabled{background:#fff;color:#bbb;border-color:var(--line);cursor:default}
+.savestate{font-size:12px;color:var(--muted);white-space:nowrap}
+.savestate.dirty{color:var(--red);font-weight:700}
+.draftbar{display:flex;gap:10px;align-items:center;flex-wrap:wrap;background:#FFF4DC;border:1px solid #F0D9A0;border-radius:8px;padding:10px 14px;font-size:13px;margin:6px 0 12px}
+.draftbar[hidden]{display:none}
+.draftbar span{flex:1;min-width:200px}
+.editbadge{background:var(--ink);color:#fff;padding:1px 6px;border-radius:3px;letter-spacing:.06em}
+body.editing .wrap{box-shadow:inset 0 3px 0 var(--red)}
+.ed{font:inherit;font-size:13.5px;border:1px solid var(--line);border-radius:6px;padding:7px 9px;width:100%;background:#fff;color:var(--ink);min-width:0}
+.ed:focus{outline:none;border-color:var(--red);box-shadow:0 0 0 3px rgba(222,0,25,.12)}
+textarea.ed{resize:vertical;line-height:1.45;overflow:hidden}
+.ed.sm{font-size:12px;padding:5px 6px;width:auto}
+.prio .prio-sel{margin-top:6px;width:100%;max-width:120px}
+.edlist{display:flex;flex-direction:column;gap:8px;margin-top:8px}
+.edrow{display:flex;gap:6px;align-items:flex-start}
+.edrow.two>.ed{flex:1}
+.edrow .ed.url{flex:1.4}
+.edrow>textarea.ed{flex:1}
+.edcard{border:1px solid var(--line);border-radius:8px;padding:8px;display:flex;flex-direction:column;gap:6px;background:#FCFCFC}
+.edlbl{display:block;font-size:10.5px;font-weight:700;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:12px 0 4px}
+.mini{border:1px solid var(--line);background:#fff;border-radius:6px;font:inherit;font-size:12px;font-weight:700;cursor:pointer;padding:6px 10px;flex-shrink:0}
+.mini.del{color:var(--muted);padding:6px 9px}
+.mini.del:hover{color:var(--red);border-color:var(--red)}
+.mini.add{align-self:flex-start;color:var(--red);border-style:dashed}
+.mini.add:hover{border-color:var(--red)}
+.navbtns .pill{height:36px;width:auto;padding:0 14px;font-size:13px}
+.navbtns .pill.save{border-color:var(--red)}
+.edrow .ed.stufe-in{flex:2}
+.edrow.two>select.ed{flex:0 1 auto;max-width:45%}
+.toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%) translateY(20px);background:var(--ink);color:#fff;padding:10px 16px;border-radius:8px;font-size:13px;opacity:0;pointer-events:none;transition:.2s;z-index:30;max-width:calc(100vw - 32px)}
+.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}
+/* Personen */
+.chip{display:inline-flex;align-items:center;gap:6px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:2px 9px 2px 2px;font-size:12.5px;font-weight:600;white-space:nowrap;max-width:100%}
+.chip i,.av{font-style:normal;display:inline-flex;align-items:center;justify-content:center;width:22px;height:22px;border-radius:50%;background:var(--ink);color:#fff;font-size:9.5px;font-weight:800;letter-spacing:.02em;flex-shrink:0}
+.chip.ext i{background:#999}
+.chip.hl{border-color:var(--red);background:rgba(222,0,25,.06)}
+.chip.hl i,.av.hl{background:var(--red)}
+.chip-x{border:0;background:transparent;color:var(--muted);cursor:pointer;font-size:11px;padding:0 0 0 2px}
+.chip-x:hover{color:var(--red)}
+.chip.kk i{background:var(--red)}
+.pickwrap{display:flex;gap:6px;align-items:flex-start}
+.kk-btn{flex-shrink:0;border:1px solid var(--line);background:#fff;border-radius:999px;padding:6px 12px;font:inherit;font-size:12.5px;font-weight:600;cursor:pointer;white-space:nowrap}
+.kk-btn:hover{border-color:var(--ink)}
+.assignees{display:flex;flex-wrap:wrap;gap:5px;align-items:center;margin-top:6px}
+.leads{display:inline-flex;gap:3px;margin-left:8px;vertical-align:middle}
+.leads .av{width:20px;height:20px;font-size:9px}
+.av.ref{background:#fff;color:var(--ink);box-shadow:inset 0 0 0 1.5px var(--ink)}
+.av.ref.hl{background:#fff;color:var(--red);box-shadow:inset 0 0 0 1.5px var(--red)}
+.legend .av{width:18px;height:18px;font-size:8.5px}
+.leadrow{margin:-4px 0 14px}
+.rolehint{margin-left:8px;font-size:11px;font-weight:600;text-transform:none;letter-spacing:0;color:var(--muted)}
+.rolehint.miss{color:var(--red)}
+.ptabs{margin-top:10px}
+.scopebar{background:rgba(222,0,25,.07);border:1px solid rgba(222,0,25,.35);border-radius:8px;padding:10px 14px;font-size:13.5px;line-height:1.5;margin:6px 0 12px}
+.scopebar[hidden]{display:none}
+.lvlcol.readonly{opacity:.55}
+.ronote{font-size:11px;font-weight:700;color:var(--muted);text-transform:uppercase;letter-spacing:.06em;margin:-2px 0 6px}
+.grid tr.areahead td{padding:22px 8px 8px;border-bottom:2px solid var(--ink);font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--ink)}
+.grid tbody tr.areahead:first-child td{padding-top:12px}
+.grid tr.kursrow{background:rgba(0,0,0,.025)}
+.areaed{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.areaed .areaname{font:inherit;font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;max-width:420px;flex:1;min-width:200px}
+.areanone,.areahint{font-size:11px;font-weight:600;text-transform:none;letter-spacing:0;color:var(--muted)}
+.areanone{font-size:13px;font-weight:800;text-transform:uppercase;letter-spacing:.08em;color:var(--ink)}
+.mini.armed{color:#fff!important;background:var(--red);border-color:var(--red)}
+.sidedel{margin:0 0 10px}
+.kursname{font-size:15px;font-weight:800;margin:12px 0 4px}
+.kscope{display:block;font-size:11.5px;font-weight:600;color:var(--muted)}
+.kursblock+.kursblock{margin-top:26px;padding-top:6px;border-top:2px solid var(--ink)}
+.ktag{display:inline-block;margin-left:8px;padding:1px 7px;border-radius:999px;border:1px solid var(--line);font-size:10.5px;font-weight:700;color:var(--muted);vertical-align:middle}
+.kurssel{align-items:center;gap:10px;margin:0 0 12px}
+.kurssel .edlbl{margin:0}
+.navbtns .mini.del{width:auto;height:36px;border-radius:999px;padding:0 14px;font-size:13px;white-space:nowrap}
+.arearow{grid-column:1/-1;display:flex;align-items:center;gap:10px;margin-bottom:-8px}
+.arearow .edlbl{margin:0}
+.ptabs button{padding:5px 12px;font-size:12px}
+.pchip{display:block;margin:6px auto 0;max-width:100%;font-size:10.5px;font-weight:600;color:var(--ink);background:#fff;border:1px solid var(--line);border-radius:999px;padding:1px 7px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;width:fit-content}
+.pchip.hl{border-color:var(--red);color:var(--red)}
+.leadby{margin:-6px 0 14px}
+.leadby-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.leadby-grid small{display:block;font-size:10.5px;font-weight:700;color:var(--red);margin-bottom:3px}
+.leadby-grid .pick-in{min-width:90px}
+.leadrow .edlbl,.leadby .edlbl{margin:0 0 4px}
+.st{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:999px}
+.st-offen{background:var(--soft);color:var(--muted)}
+.st-arbeit{background:#FFF4DC;color:#8A5A00}
+.st-erledigt{background:#E7F4EA;color:#1E7B34}
+.picker{position:relative;display:flex;flex-wrap:wrap;gap:5px;align-items:center;border:1px solid var(--line);border-radius:6px;padding:4px;background:#fff;flex:1;min-width:0}
+.picker:focus-within{border-color:var(--red);box-shadow:0 0 0 3px rgba(222,0,25,.12)}
+.pick-in{border:0;outline:0;font:inherit;font-size:13px;flex:1;min-width:150px;padding:3px 4px;background:transparent}
+.pick-dd{position:absolute;left:-1px;right:-1px;top:calc(100% + 4px);background:#fff;border:1px solid var(--line);border-radius:8px;box-shadow:0 10px 30px rgba(0,0,0,.12);z-index:5;max-height:280px;overflow:auto}
+.pick-dd[hidden]{display:none}
+.dd-it{padding:7px 10px;cursor:pointer;font-size:13px;border-bottom:1px solid #f2f2f2}
+.dd-it small{display:block;color:var(--muted);font-size:11px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.dd-it.act,.dd-it:hover{background:rgba(222,0,25,.06)}
+.dd-it.ext{color:var(--muted);font-style:italic}
+.offtag{font-size:9.5px;font-weight:700;color:#fff;background:var(--red);border-radius:3px;padding:1px 5px;margin-left:4px;vertical-align:1px}
+.edassign{display:flex;gap:6px;align-items:flex-start;margin-top:6px}
+#personSel{min-width:170px;cursor:pointer}
+@media (max-width:860px){.editctl{margin-left:0;flex-wrap:wrap}}
+@media print{.controls,.overlay{display:none!important}}
+
+body.readonly #editToggle, body.readonly #saveBtn, body.readonly #pubBtn, body.readonly #pubInfo, body.readonly [data-toggle-edit], body.readonly [data-save]{display:none!important}
+.lz-boot{max-width:1200px;margin:40px auto;padding:0 max(16px, env(safe-area-inset-right, 0px)) 0 max(16px, env(safe-area-inset-left, 0px));color:var(--muted);font-size:15px}
+.lz-boot b{color:var(--ink)}
+.pubinfo{font-size:12px;color:var(--muted);white-space:nowrap}
+.modtabs{display:flex;gap:6px;flex-wrap:wrap;margin:0 0 6px}
+.modtabs a{border:1px solid var(--line);border-radius:999px;padding:6px 14px;font-weight:700;font-size:13px;color:var(--ink);text-decoration:none;background:#fff}
+.modtabs a[aria-current="page"]{background:var(--red);border-color:var(--red);color:#fff}
+</style>
+</head>
+<body>
+
+<div class="wrap">
+  <nav class="modtabs" id="modTabs" aria-label="Kurs"></nav>
+  <header>
+    <div>
+      <h1>Off-Snow Talent vs. Leistungssport</h1>
+    </div>
+    <div class="logo" aria-label="Swiss-Ski"><svg viewBox="0 0 95 19.26" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" id="Ebene_1" overflow="hidden"><defs/><path d="M51.94 6.25C50.64 5.72 49.3 5.5 47.81 5.5 44.59 5.5 42.26 7.16 42.26 10.31 42.26 11.97 43.46 12.88 44.5 13.55 45.58 14.25 46.07 14.56 46.07 15.09 46.07 15.79 45.37 16.08 44.43 16.08 43.49 16.08 42.53 15.74 41.81 15.29L40.58 18.51C41.9 19.09 43.35 19.26 44.84 19.26 47.7 19.28 50.66 17.86 50.66 14.45 50.66 12.67 49.33 11.71 48.23 11.01 47.39 10.48 46.67 10.1 46.67 9.49 46.67 9.01 47.08 8.55 48.14 8.55 49.1 8.55 50.04 8.89 50.74 9.35L51.97 6.25ZM40.88 6.35C39.79 5.75 38.6 5.5 37.19 5.5 34.03 5.5 32.16 7.32 32.16 9.92 32.16 11.72 33.42 12.61 34.54 13.35 35.78 14.18 36.29 14.64 36.29 15.34 36.29 16.39 35.29 16.73 34.32 16.73 33.35 16.73 32.3 16.36 31.55 15.85L30.38 18.38C31.48 19.04 33.05 19.26 34.42 19.26 36.97 19.26 39.57 17.68 39.57 14.74 39.57 12.82 38.16 11.87 36.94 11.12 36.26 10.68 35.31 10.1 35.31 9.25 35.31 8.69 35.75 7.99 37.13 7.99 38.13 7.99 39.05 8.28 39.76 8.77L40.88 6.36ZM8.34 7.57C7.82 6.66 6.91 6.33 5.87 6.33 4.35 6.33 3.03 7.26 3.03 8.88 3.03 10.11 3.79 10.77 4.98 11.68 5.3 11.92 5.62 12.16 5.93 12.42 6.24 12.68 6.54 12.95 6.79 13.26 7.31 13.87 7.67 14.6 7.67 15.52 7.67 17.84 5.62 19.26 3.54 19.26 2.21 19.26 0.85 18.86 0.06 17.62L-0.01 17.52 0.74 16.9 0.82 17.05C1.37 18.05 2.42 18.41 3.53 18.41 5.17 18.41 6.66 17.38 6.66 15.61 6.66 14.86 6.41 14.31 6 13.83 5.79 13.58 5.55 13.36 5.27 13.13 4.99 12.9 4.69 12.67 4.37 12.43 3.24 11.59 2.04 10.58 2.04 8.98 2.04 6.82 3.94 5.5 5.86 5.5 7.09 5.5 8.36 5.87 9.07 7.02L9.14 7.12 8.41 7.71 8.33 7.57ZM20.86 14.03 24.42 5.77 25.97 5.77 20.08 19.01 18.49 19.01 17.97 10.4C17.89 9.36 17.86 8.39 17.86 7.78 17.59 8.4 17.16 9.37 16.62 10.44L12.35 19.02 10.81 19.02 10.63 5.78 12.14 5.78 12.12 14.08C12.12 15.16 12.11 16.28 12.09 16.93 12.37 16.28 12.88 15.15 13.4 14.08L17.51 5.77 19.17 5.77 19.62 14.09C19.68 15.21 19.71 16.28 19.72 16.89 19.96 16.28 20.38 15.23 20.89 14.03M30.4 5.76 28.12 5.76 25.32 19 27.6 19 30.4 5.76ZM31.61 1.1C31.61 0.45 31.11 0 30.44 0 29.51 0 28.76 0.8 28.76 1.78 28.76 2.46 29.29 2.88 29.94 2.88 30.86 2.88 31.62 2.08 31.62 1.1" fill="#E2001A"/><path d="M66.01 0.5 66.01 19.01 71.51 19.01 71.51 15.38 72.29 14.3 74.04 19.01 80.8 19.01 76.72 10.99 80.67 5.5 74.16 5.5 71.51 10.12 71.51 0.5 66.01 0.5Z" fill="#E2001A"/><g><path d="M53.68 15.1C54.57 15.43 55.63 15.67 56.64 15.67 57.48 15.67 57.96 15.36 57.96 14.88 57.96 14.32 57.42 14.09 56.88 13.92L55.94 13.62C54.5 13.16 53.09 12.05 53.09 10.05 53.09 7.26 55.3 5.25 59.38 5.25 60.7 5.25 62.19 5.43 63.68 5.75L63.06 9.17C62.13 8.88 61.1 8.66 60.06 8.66 59.3 8.66 58.97 8.94 58.97 9.38 58.97 9.79 59.38 10 59.85 10.16L60.69 10.44C62.58 11.06 64.16 11.91 64.16 14.16 64.16 17.53 61.41 19.26 57.5 19.26 56.03 19.26 54.5 19.1 53.03 18.74L53.7 15.1Z" fill="#E2001A"/><path d="M85.54 4.67C83.65 4.67 82.41 3.76 82.41 2.35 82.41 1.16 83.38 0 85.54 0 87.52 0 88.62 0.96 88.62 2.35 88.62 3.81 87.38 4.67 85.54 4.67" fill="#E2001A"/></g><path d="M82.52 5.5 82.52 19.01 88.51 19.01 88.51 14.51 87.76 14.51 87.76 16.26 86.26 16.26 86.26 14.51 84.51 14.51 84.51 13 86.26 13 86.26 11.25 87.76 11.25 87.76 13 88.51 13 88.51 5.5 82.52 5.5Z" fill="#E2001A"/></svg></div>
+  </header>
+
+  <div class="controls">
+    <div><span class="ctl-label">Disziplin</span><span class="seg" id="segDisz"></span></div>
+    <select class="search" id="personSel" aria-label="Nach Person filtern"></select>
+    <div class="editctl">
+      <span class="savestate" id="saveState"></span>
+      <button class="pill" id="editToggle" aria-pressed="false">Bearbeiten</button>
+      <button class="pill save" id="saveBtn" disabled title="Speichern (Ctrl/Cmd+S)">Speichern</button>
+    </div>
+  </div>
+  <div class="draftbar" id="draftBar" hidden></div>
+  <div class="scopebar" id="scopeBar" hidden></div>
+
+  <div class="legend">
+    <span><i class="b K">K</i> im Kurs behandeln</span>
+    <span><i class="b L">L</i> über Lernflink abgedeckt</span>
+    <span><i class="b N">–</i> nicht relevant</span>
+    <span><i class="b O">?</i> noch nicht priorisiert</span>
+    <span><i class="av">AB</i> Verantwortlich</span>
+    <span><i class="av ref">AB</i> Referent/in</span>
+  </div>
+
+  <table class="grid" id="grid"></table>
+  <p class="lz-boot" id="lzBoot">Lernziele werden geladen …</p>
+
+<div class="toast" id="toast" role="status"></div>
+<datalist id="stufen"><option>Stufe 1: Erinnern</option><option>Stufe 2: Verstehen</option><option>Stufe 3: Anwenden</option><option>Stufe 4: Analysieren</option><option>Stufe 5: Bewerten</option><option>Stufe 6: Erschaffen</option></datalist>
+</div>
+
+<div class="overlay" id="overlay" aria-hidden="true">
+  <div class="panel" id="panel" role="dialog" aria-modal="true" aria-labelledby="pTitle"></div>
+</div>
+
+
+<script type="application/json" id="lz-data">{}</script>
+<script type="text/plain" id="lz-app">
+/* =====================================================================
+   Lernziele Talent vs. Leistungssport – interaktive Übersicht mit Editor
+   Die Daten stehen im JSON-Block #lz-data und werden beim Speichern
+   direkt in diese HTML-Datei zurückgeschrieben.
+   ===================================================================== */
+const DISZ = JSON.parse(document.getElementById("lz-data").textContent).disz || [
+  {id:"alpin", label:"Alpin / Speed"},
+  {id:"fs",    label:"Freestyle Style"},
+  {id:"ll",    label:"Langlauf & Biathlon"},
+  {id:"sp",    label:"Skispringen"}
+];
+const FIELDS = [
+  {id:"lerninhalte",  label:"Lerninhalte",                    type:"links"},
+  {id:"kompetenzen",  label:"Minimale Austrittskompetenzen",  type:"points", rich:true},
+  {id:"kursfragen",   label:"Kursfragen",                     type:"points"},
+  {id:"bemerkungen",  label:"Bemerkungen / Offene Punkte",    type:"text"}
+];
+/* Vorbereitungsauftrag und Prüfungen gelten pro Kurs (Stufe × Disziplin), nicht pro Thema */
+const KURS_ID = "__kurs";
+const COURSE_FIELDS = [
+  {id:"vorbereitung", label:"Vorbereitungsauftrag", type:"links"},
+  {id:"pruefung",     label:"Prüfungen",            type:"links"}
+];
+const STUFEN = ["Stufe 1: Erinnern","Stufe 2: Verstehen","Stufe 3: Anwenden","Stufe 4: Analysieren","Stufe 5: Bewerten","Stufe 6: Erschaffen"];
+const PRIO_OPTS = [["K","K – im Kurs"],["L","L – Lernflink"],["","– nicht relevant"],["?","? – offen"]];
+let DRAFT_KEY = "lz-talent-ls-draft-v1";
+
+const DATA = JSON.parse(document.getElementById("lz-data").textContent);
+DATA.meta = DATA.meta || {};
+if (DATA.meta.scope) DRAFT_KEY += "-" + DATA.meta.scope.id;
+
+const state = {modul:"offsnow", disz:"alpin", q:"", person:"", open:null, edit:false, dirty:false};
+let fileHandle = null;
+const $ = s => document.querySelector(s);
+const esc = s => String(s ?? "").replace(/[&<>"]/g, c => ({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+
+/* ---------- Personen (Education Pool) ---------- */
+const POOL = (DATA.pool && DATA.pool.people) || [];
+const PBY = Object.fromEntries(POOL.map(p => [p.id, p]));
+const STATUS = [["","Status –"],["offen","Offen"],["arbeit","In Arbeit"],["erledigt","Erledigt"]];
+const KK = "kurskader";
+const pName = pid => pid === KK ? "Kurskader" : PBY[pid] ? PBY[pid].name : String(pid).replace(/^x:/, "");
+const initials = n => n.replace(/\(.*?\)|".*?"/g,"").trim().split(/\s+/).filter(Boolean).map(w=>w[0]).slice(0,2).join("").toUpperCase();
+function chip(pid, rmPath, i){
+  const n = pName(pid), p = PBY[pid];
+  const hl = state.person && state.person === pid ? " hl" : "";
+  const tip = pid === KK ? "Thema wird vom ganzen Kurskader gegeben" : p ? n : n + " (nicht im Education Pool)";
+  return `<span class="chip${hl}${p||pid===KK?"":" ext"}${pid===KK?" kk":""}" title="${esc(tip)}"><i>${esc(initials(n))}</i>${esc(n)}${rmPath ? `<button class="chip-x" data-unpick="${rmPath}" data-i="${i}" aria-label="${esc(n)} entfernen">✕</button>` : ""}</span>`;
+}
+const chips = arr => (arr||[]).map(pid => chip(pid)).join("");
+function picker(path, arr){
+  return `<div class="picker" data-ppath="${path}">${(arr||[]).map((pid,i)=>chip(pid, path, i)).join("")}
+    <input class="pick-in" placeholder="+ Person aus Education Pool …" autocomplete="off"><div class="pick-dd" hidden></div></div>`;
+}
+function cur(s){
+  if (!s) return {};
+  s.byDisz = s.byDisz || {};
+  return s.byDisz[state.disz] = s.byDisz[state.disz] || {};
+}
+function courses(){
+  const m = DATA[state.modul]; m.courses = m.courses || {};
+  ["talent","ls"].forEach(k => { m.courses[k] = m.courses[k] || {}; m.courses[k].byDisz = m.courses[k].byDisz || {}; });
+  return m.courses;
+}
+function leadsFor(s){
+  const a = [...(cur(s).assign?.lead||[])];
+  return a;
+}
+function refsFor(s){ return [...(cur(s).assign?.ref||[])]; }
+/* Regel: K oder ? -> Verantwortlich + Referent/in; L -> nur Verantwortlich; nicht relevant -> niemand */
+function roleNeed(s){ const v = s.prio[dIdx()] || ""; return {lead: v !== "", ref: v === "?" || v.startsWith("K"), why: v === "" ? "nicht relevant" : "über Lernflink abgedeckt"}; }
+function roleRow(label, path, arr, need, why, edit){
+  const has = arr && arr.length;
+  if (!need && !has) return "";
+  const hint = need && !has ? `<span class="rolehint miss">fehlt</span>` : !need ? `<span class="rolehint">nicht nötig, da ${why} – bitte entfernen</span>` : "";
+  const kkBtn = edit && /\.ref$/.test(path) && !(arr||[]).includes(KK) ? `<button type="button" class="kk-btn" data-kk="${path}" title="Thema wird von allen im Kurskader gegeben">+ Kurskader</button>` : "";
+  return `<div class="leadrow"><span class="edlbl">${label}${hint}</span>${edit ? `<div class="pickwrap">${picker(path, arr)}${kkBtn}</div>` : `<div class="assignees">${chips(arr)}</div>`}</div>`;
+}
+function roleRows(s, cp, c, edit){
+  const n = roleNeed(s);
+  return roleRow("Verantwortlich", `${cp}.assign.lead`, c.assign?.lead, n.lead, n.why, edit)
+       + roleRow("Referent/in", `${cp}.assign.ref`, c.assign?.ref, n.ref, n.why, edit);
+}
+function statusPill(st){ return st ? `<span class="st st-${st}">${STATUS.find(x=>x[0]===st)[1]}</span>` : ""; }
+function allAssigned(side){
+  const as = side && cur(side).assign;
+  if (!as) return [];
+  const a = [...(as.lead||[]), ...(as.ref||[])];
+  Object.values(as.fields||{}).forEach(f => (f.people||[]).forEach(p => a.push(p)));
+  return a;
+}
+function assignedPeople(){
+  const set = new Set();
+  DATA[state.modul].topics.forEach(t => [t.talent, t.ls].forEach(s => allAssigned(s).forEach(p => set.add(p))));
+  ["talent","ls"].forEach(k => courseEntries(k).forEach(e => nodeAssigned(e.obj).forEach(p => set.add(p))));
+  return [...set].sort((a,b)=>pName(a).localeCompare(pName(b)));
+}
+
+/* ---------- Anzeige ---------- */
+function badge(v){
+  if (v === "?") return '<i class="b O" title="noch nicht priorisiert">?</i>';
+  if (!v) return '<i class="b N" title="nicht relevant">–</i>';
+  const m = v.match(/^([KL])\s*(?:\((.*)\))?$/);
+  const k = m ? m[1] : v[0];
+  const t = k === "K" ? "im Kurs behandeln" : "über Lernflink abgedeckt";
+  return `<i class="b ${k}" title="${t}${m&&m[2] ? ' – '+esc(m[2]) : ''}">${k}${m&&m[2] ? '<small>'+esc(m[2])+'</small>' : ''}</i>`;
+}
+function visItems(arr){ return (arr||[]).filter(x => typeof x === "string" || !x.disz || x.disz === state.disz); }
+function pointHtml(x){
+  if (typeof x === "string") return `<li>${esc(x)}</li>`;
+  return `<li>${x.t ? `<b>${esc(x.t)}</b>${x.s ? ` <span class="stufe">${esc(x.s)}</span>` : ""}<br>` : ""}${esc(x.x)}</li>`;
+}
+function hasVal(f, v){
+  if (!v) return false;
+  if (f.type === "links") return !!((v.links && v.links.length) || (v.bemerkung && v.bemerkung.trim()) || (v.items && v.items.length));
+  if (f.type === "points") return Array.isArray(v) && visItems(v).length > 0;
+  return String(v).trim() !== "";
+}
+function filled(side){
+  const d = cur(side).details || {};
+  return FIELDS.filter(f => hasVal(f, d[f.id])).length / FIELDS.length;
+}
+const dIdx = () => DISZ.findIndex(d => d.id === state.disz);
+function relevant(side){ return !!side && side.prio[dIdx()] !== ""; }
+function areas(){ return DATA[state.modul].areas || []; }
+function visibleTopics(){
+  const q = state.q.trim().toLowerCase();
+  const ar = areas();
+  const ord = t => { const i = ar.indexOf(t.area); return i < 0 ? 99 : i; };
+  return DATA[state.modul].topics.map((t,i)=>({t,i})).sort((a,b)=> ord(a.t)-ord(b.t) || a.i-b.i).map(x=>x.t).filter(t => {
+    if (q && ![t.talent?.name, t.ls?.name, t.talent?.note, t.ls?.note].join(" ").toLowerCase().includes(q)) return false;
+    if (state.person && !allAssigned(t.talent).concat(allAssigned(t.ls)).includes(state.person)) return false;
+    return state.edit || relevant(t.talent) || relevant(t.ls);
+  });
+}
+
+function renderControls(){
+  $("#segDisz").innerHTML = DISZ.map(d =>
+    `<button data-d="${d.id}" aria-pressed="${state.disz===d.id}">${d.label}</button>`).join("");
+  const ap = assignedPeople();
+  if (state.person && !ap.includes(state.person)) ap.unshift(state.person);
+  $("#personSel").innerHTML = `<option value="">Alle Personen</option>${ap.map(p=>`<option value="${esc(p)}" ${p===state.person?"selected":""}>${esc(pName(p))}</option>`).join("")}`;
+  $("#editToggle").setAttribute("aria-pressed", state.edit);
+  $("#editToggle").textContent = state.edit ? "Bearbeiten: an" : "Bearbeiten";
+  document.body.classList.toggle("editing", state.edit);
+  renderStatus();
+}
+function renderStatus(){
+  const s = $("#saveState");
+  if (window.LZB) { const st = LZB.status(); s.className = "savestate" + (st.warn ? " dirty" : ""); s.textContent = st.text;
+    $("#saveBtn").disabled = !state.dirty; document.querySelectorAll("[data-save]").forEach(b => b.disabled = !state.dirty); return; }
+  if (window.LZ_STATIC) { s.textContent = window.LZ_STAND ? "Stand " + window.LZ_STAND : ""; return; }
+  const when = DATA.meta.savedAt ? new Date(DATA.meta.savedAt).toLocaleString("de-CH",{dateStyle:"medium",timeStyle:"short"}) : null;
+  s.className = "savestate" + (state.dirty ? " dirty" : "");
+  s.textContent = state.dirty ? "Ungespeicherte Änderungen" : (when ? "Gespeichert " + when : "");
+  $("#saveBtn").disabled = !state.dirty;
+  document.querySelectorAll("[data-save]").forEach(b => b.disabled = !state.dirty);
+}
+
+function renderGrid(){
+  const label = DISZ[dIdx()].label;
+  const side = (s, lvl) => {
+    if (!s || !relevant(s)) return `<td data-lvl="${lvl}"><span class="absent">${s ? "für diese Disziplin nicht relevant" : "–"}</span></td>`;
+    const kl = kursLabel(lvl === "Talent" ? "talent" : "ls", s);
+    return `<td data-lvl="${lvl}"><div class="cell"><div class="name">${esc(s.name)}${kl ? `<span class="ktag">${esc(kl)}</span>` : ""}${s.note?`<span class="note">${esc(s.note)}</span>`:""}
+      <span class="note">Infos erfasst <span class="fill"><i style="width:${filled(s)*100}%"></i></span>${leadsFor(s).length || refsFor(s).length ? `<span class="leads">${leadsFor(s).map(pid=>`<i class="av${state.person===pid?" hl":""}" title="Verantwortlich: ${esc(pName(pid))}">${esc(initials(pName(pid)))}</i>`).join("")}${refsFor(s).map(pid=>`<i class="av ref${state.person===pid?" hl":""}" title="Referent/in: ${esc(pName(pid))}">${esc(initials(pName(pid)))}</i>`).join("")}</span>` : ""}</span></div>${badge(s.prio[dIdx()])}</div></td>`;
+  };
+  const rows = visibleTopics();
+  const kf = es => { const n = es.length * COURSE_FIELDS.length; return n ? es.reduce((a,e) => a + COURSE_FIELDS.filter(f => hasVal(f, e.obj.details?.[f.id])).length, 0) / n : 0; };
+  const kcell = (k, area) => { const es = courseEntriesFor(k, area);
+    if (!es.length) return `<td><span class="absent">–</span></td>`;
+    const who = [...new Set(es.flatMap(e => nodeAssigned(e.obj)))];
+    return `<td><div class="cell"><div class="name">${area ? `Übergreifend<span class="note">Vorbereitungsauftrag &amp; Prüfungen · ${esc(es.map(e => e.name).join(" · "))}</span>` : `Vorbereitungsauftrag &amp; Prüfungen<span class="note">${es.length > 1 ? esc(es.map(e => e.name).join(" · ")) : "gilt für den ganzen Kurs"}</span>`}
+      <span class="note">Infos erfasst <span class="fill"><i style="width:${kf(es)*100}%"></i></span>${who.length ? `<span class="leads">${who.map(pid=>`<i class="av${state.person===pid?" hl":""}" title="${esc(pName(pid))}">${esc(initials(pName(pid)))}</i>`).join("")}</span>` : ""}</span></div></div></td>`; };
+  const M = DATA[state.modul], AK = M.areaKurs;
+  const kursRowFor = a => `<tr class="row kursrow" tabindex="0" data-id="${KURS_ID}" data-karea="${esc(a)}">${kcell("talent", a)}<td class="arrow"><span class="zoomhint">⤢</span></td>${kcell("ls", a)}</tr>`;
+  const kursRow = AK ? "" : `<tr class="areahead"><td colspan="3">Übergreifend</td></tr>
+      <tr class="row kursrow" tabindex="0" data-id="${KURS_ID}">${kcell("talent")}<td class="arrow"><span class="zoomhint">⤢</span></td>${kcell("ls")}</tr>`;
+  const areaOk = a => !M.areaDisz?.[a] || M.areaDisz[a].includes(state.disz);
+  const areaView = () => areas().filter(areaOk).map(a => `<tr class="areahead"><td colspan="3">${esc(a)}</td></tr>${AK[a] ? kursRowFor(a) : ""}${rows.filter(t => t.area === a).map(rowHtml).join("")}`).join("")
+    + rows.filter(t => !areas().includes(t.area)).map(rowHtml).join("");
+  $("#grid").innerHTML = `
+    <thead><tr>
+      <th style="width:48%"><span class="lvl">Talent</span>${esc(courseName("talent"))}<div style="margin-top:6px">${label}</div></th>
+      <th></th>
+      <th style="width:48%"><span class="lvl">Leistungssport</span>${esc(courseName("ls"))}<div style="margin-top:6px">${label}</div></th>
+    </tr></thead>
+    <tbody>${kursRow}${state.edit && !DATA.meta.scope ? editBody(rows, rowHtml, AK ? kursRowFor : null) : AK ? areaView() : rows.map((t,i) => `${t.area && t.area !== rows[i-1]?.area ? `<tr class="areahead"><td colspan="3">${esc(t.area)}</td></tr>` : ""}
+      ${rowHtml(t)}`).join("") || `<tr><td colspan="3" class="absent">Keine Themen gefunden.</td></tr>`}
+    </tbody>`;
+  function rowHtml(t){ return `<tr class="row" tabindex="0" data-id="${t.id}">
+        ${side(t.talent,"Talent")}
+        <td class="arrow">${t.talent && t.ls ? "→" : ""}<span class="zoomhint">⤢</span></td>
+        ${side(t.ls,"Leistungssport")}
+      </tr>`; }
+}
+
+/* ---------- Themenbereiche & Themen verwalten (nur Master) ---------- */
+function editBody(rows, rowHtml, kursRowFor){
+  const AK = DATA[state.modul].areaKurs;
+  const ar = areas(), all = DATA[state.modul].topics;
+  const groups = ar.map(a => [a, rows.filter(t => t.area === a), true]);
+  const orphan = rows.filter(t => !ar.includes(t.area));
+  if (orphan.length) groups.push(["", orphan, false]);
+  return groups.map(([a, ts, named]) => `<tr class="areahead edit"><td colspan="3"><div class="areaed">
+      ${named ? `<input class="ed areaname" data-area="${esc(a)}" value="${esc(a)}" placeholder="Name Themenbereich" aria-label="Name Themenbereich">` : `<span class="areanone">Ohne Themenbereich</span>`}
+      <button class="mini add" data-addtopic="${esc(a)}">+ Thema</button>
+      ${named ? (all.some(t => t.area === a) ? `<span class="areahint">Bereich löschen: zuerst Themen löschen oder verschieben</span>` : `<button class="mini del" data-delarea="${esc(a)}">Bereich löschen</button>`) : ""}
+    </div></td></tr>${kursRowFor && AK && AK[a] ? kursRowFor(a) : ""}${ts.map(rowHtml).join("")}`).join("")
+    + `<tr class="areahead edit"><td colspan="3"><button class="mini add" data-addarea>+ Themenbereich</button></td></tr>`;
+}
+function addArea(){
+  const m = DATA[state.modul]; m.areas = m.areas || [];
+  let n = "Neuer Themenbereich", i = 2; while (m.areas.includes(n)) n = "Neuer Themenbereich " + i++;
+  m.areas.push(n); markDirty(); renderGrid();
+  const inp = document.querySelector(`.areaname[data-area="${n}"]`); if (inp){ inp.focus(); inp.select(); }
+}
+function renameArea(el){
+  const m = DATA[state.modul], old = el.dataset.area, nw = el.value.trim();
+  if (!nw || nw === old) { el.value = old; return; }
+  if (m.areas.includes(nw)) { toast("Diesen Themenbereich gibt es schon."); el.value = old; return; }
+  m.areas[m.areas.indexOf(old)] = nw;
+  m.topics.forEach(t => { if (t.area === old) t.area = nw; });
+  if (m.areaDisz && m.areaDisz[old]) { m.areaDisz[nw] = m.areaDisz[old]; delete m.areaDisz[old]; }
+  if (m.areaKurs && m.areaKurs[old]) { m.areaKurs[nw] = m.areaKurs[old]; delete m.areaKurs[old]; const id = m.areaKurs[nw].talent; if (id && id !== "*" && m.kurse?.[id]) m.kurse[id].name = nw; }
+  markDirty(); renderGrid();
+}
+function delArea(a){
+  const m = DATA[state.modul];
+  if (m.topics.some(t => t.area === a)) return;
+  m.areas = m.areas.filter(x => x !== a); if (m.areaDisz) delete m.areaDisz[a]; if (m.areaKurs) delete m.areaKurs[a]; markDirty(); renderGrid();
+}
+const newSide = () => ({name:"Neues Thema", prio:DISZ.map(() => "?"), byDisz:{}});
+function addTopic(area){
+  const T = DATA[state.modul].topics;
+  let id; do { id = "t" + Math.random().toString(36).slice(2,8); } while (T.some(x => x.id === id));
+  let idx = -1; T.forEach((x,i) => { if (x.area === area) idx = i; });
+  const nt = {id, area, talent:newSide(), ls:newSide()};
+  const ad = (DATA[state.modul].areaDisz || {})[area];
+  if (ad) ["talent","ls"].forEach(k => nt[k].prio = DISZ.map(d => ad.includes(d.id) ? "?" : ""));
+  T.splice(idx < 0 ? T.length : idx + 1, 0, nt);
+  markDirty(); renderGrid(); openTopic(id, document.querySelector(`tr.row[data-id="${id}"]`));
+  const n = $("#panel").querySelector('[data-path="talent.name"]'); if (n){ n.focus(); n.select(); }
+}
+function armed(btn, label){
+  if (btn.dataset.armed) return true;
+  btn.dataset.armed = "1"; btn.textContent = label; btn.classList.add("armed");
+  setTimeout(() => { if (btn.isConnected){ delete btn.dataset.armed; btn.textContent = btn.dataset.label; btn.classList.remove("armed"); } }, 4000);
+  return false;
+}
+function fieldView(f, d, asg){
+  const v = d?.[f.id];
+  let body = `<div class="fv empty">Noch nicht erfasst</div>`;
+  if (hasVal(f, v)){
+    if (f.type === "links"){
+      const links = (v.links||[]).filter(l=>l.url||l.label).map(l => `<li><a href="${esc(l.url)}" target="_blank" rel="noopener">${esc(l.label || l.url)}</a>${l.lang ? ` <span class="langtag" title="${l.lang==="DE/FR"?"Inhalt ist zweisprachig":"Französische Version existiert"}">${esc(l.lang)}</span>` : ""}</li>`).join("");
+      body = (links ? `<ul class="links">${links}</ul>` : "")
+           + (v.bemerkung ? `<div class="rem"><span>Bemerkung</span>${esc(v.bemerkung)}</div>` : "")
+           + (v.items && v.items.length ? `<div class="sublbl">${esc(v.itemsLabel||"Weitere Punkte")}</div><ul class="pts">${v.items.map(pointHtml).join("")}</ul>` : "");
+    } else if (f.type === "points"){
+      body = `<ul class="pts">${visItems(v).map(pointHtml).join("")}</ul>`;
+    } else body = `<div class="fv">${esc(v)}</div>`;
+  } else if (f.type === "links"){
+    body = `<div class="fv empty">Noch keine Links erfasst</div>`;
+  }
+  const who = asg && ((asg.people && asg.people.length) || asg.status)
+    ? `<div class="assignees">${chips(asg.people)}${statusPill(asg.status)}</div>` : "";
+  return `<div class="field"><div class="fl">${f.label}</div>${who}${body}</div>`;
+}
+
+/* ---------- Editor ---------- */
+// Pfade sind relativ zum aktuellen Thema, z.B. "talent.details.lerninhalte.links.0.url"
+const inp = (path, val, ph, cls="") => `<input class="ed ${cls}" data-path="${path}" value="${esc(val)}" placeholder="${esc(ph)}" ${cls.includes("stufe-in")?'list="stufen"':''}>`;
+const ta  = (path, val, ph, rows=2) => `<textarea class="ed" data-path="${path}" rows="${rows}" placeholder="${esc(ph)}">${esc(val)}</textarea>`;
+const delBtn = (path, i) => `<button class="mini del" data-del="${path}" data-i="${i}" title="Entfernen" aria-label="Entfernen">✕</button>`;
+const addBtn = (path, kind, label) => `<button class="mini add" data-add="${path}" data-kind="${kind}">+ ${label}</button>`;
+function diszSel(path, val){
+  return `<select class="ed sm" data-path="${path}" title="Gilt für">
+    <option value="">alle Disziplinen</option>${DISZ.map(d=>`<option value="${d.id}" ${val===d.id?"selected":""}>nur ${d.label}</option>`).join("")}</select>`;
+}
+function fieldEdit(f, d, base, key, s, node){
+  const v = d?.[f.id];
+  const p = `${base}.${f.id}`;
+  let body = "";
+  if (f.type === "links"){
+    const links = v?.links || [];
+    body = `<div class="edlist">${links.map((l,i)=>`
+        <div class="edrow two">${inp(`${p}.links.${i}.label`, l.label, "Bezeichnung")}${inp(`${p}.links.${i}.url`, l.url, "https://…", "url")}${delBtn(`${p}.links`, i)}</div>`).join("")}
+      ${addBtn(`${p}.links`, "link", "Link")}</div>
+      <label class="edlbl">Bemerkung</label>${ta(`${p}.bemerkung`, v?.bemerkung || "", "Generelle Bemerkung …")}`;
+    if (v?.items){
+      body += `<label class="edlbl">${esc(v.itemsLabel || "Weitere Punkte")}</label><div class="edlist">${v.items.map((x,i)=>`
+        <div class="edrow">${ta(`${p}.items.${i}`, typeof x === "string" ? x : x.x, "Punkt …", 3)}${delBtn(`${p}.items`, i)}</div>`).join("")}
+        ${addBtn(`${p}.items`, "string", "Punkt")}</div>`;
+    }
+  } else if (f.type === "points"){
+    const arr = v || [];
+    body = `<div class="edlist">${arr.map((x,i)=>{
+      const o = typeof x === "string" ? {x} : x;
+      return f.rich
+        ? `<div class="edcard">
+             <div class="edrow">${inp(`${p}.${i}.t`, o.t, "Titel")}${delBtn(p, i)}</div>
+             <div class="edrow two">${inp(`${p}.${i}.s`, o.s, "Stufe", "stufe-in")}${diszSel(`${p}.${i}.disz`, o.disz)}</div>
+             ${ta(`${p}.${i}.x`, o.x, "Die TN …", 3)}
+           </div>`
+        : `<div class="edrow">${ta(`${p}.${i}.x`, o.x, "Frage …", 2)}${diszSel(`${p}.${i}.disz`, o.disz)}${delBtn(p, i)}</div>`;
+    }).join("")}${addBtn(p, f.rich ? "komp" : "frage", f.rich ? "Kompetenz" : "Frage")}</div>`;
+  } else {
+    body = ta(p, v || "", "Bemerkungen, offene Punkte …", 3);
+  }
+  const asg = (node || cur(s)).assign?.fields?.[f.id] || {};
+  const st = asg.status || "";
+  const who = `<div class="edassign">${picker(`${key}.assign.fields.${f.id}.people`, asg.people)}
+    <select class="ed sm" data-path="${key}.assign.fields.${f.id}.status" title="Status">${STATUS.map(o=>`<option value="${o[0]}" ${o[0]===st?"selected":""}>${o[1]}</option>`).join("")}</select></div>`;
+  return `<div class="field"><div class="fl">${f.label}</div>${who}${body}</div>`;
+}
+
+function levelCol(t, key, lvl, cls){
+  const s = t[key];
+  const head = `<h3><span class="tag">${lvl}</span><span class="nm" title="${s?esc(s.name):""}">${s ? esc(s.name) : ""}</span></h3>`;
+  if (!s) return `<div class="lvlcol ${cls}">${head}<div class="notpart">Dieses Thema ist auf der Ebene <b>${lvl}</b> kein eigenes Kursthema.</div>${state.edit && !DATA.meta.scope ? `<button class="mini add" data-addside="${key}">+ Thema auf Ebene ${lvl} anlegen</button>` : ""}</div>`;
+  const SC = DATA.meta.scope;
+  const mayEdit = !SC || (SC.levels.includes(key) && SC.disz.includes(state.disz));
+  if (state.edit && mayEdit && SC){
+    const c = cur(s), cp = `${key}.byDisz.${state.disz}`;
+    c.details = c.details || {};
+    return `<div class="lvlcol ${cls}">${head}<div class="tname">${s.note?esc(s.note):"&nbsp;"}</div>${kursSel(key, s)}
+      <div class="prio">${DISZ.map((d,i)=>{
+        const cur = s.prio[i];
+        if (!SC.disz.includes(d.id)) return `<div class="${d.id===state.disz?"sel":""}" title="${d.label}">${d.label}<br>${badge(cur)}</div>`;
+        const opts = PRIO_OPTS.some(o=>o[0]===cur) ? PRIO_OPTS : [[cur,cur], ...PRIO_OPTS];
+        return `<div class="${d.id===state.disz?"sel":""}" title="${d.label}">${d.label}<br>
+          <select class="ed sm prio-sel" data-path="${key}.prio.${i}">${opts.map(o=>`<option value="${esc(o[0])}" ${o[0]===cur?"selected":""}>${esc(o[1])}</option>`).join("")}</select></div>`;
+      }).join("")}</div>
+      ${roleRows(s, cp, c, true)}
+      ${FIELDS.map(f=>fieldEdit(f, c.details, `${cp}.details`, cp, s)).join("")}</div>`;
+  }
+  if (state.edit && mayEdit){
+    const c = cur(s), cp = `${key}.byDisz.${state.disz}`;
+    c.details = c.details || {};
+    return `<div class="lvlcol ${cls}">${head}
+      ${t[key === "talent" ? "ls" : "talent"] ? `<button class="mini del sidedel" data-delside="${key}" data-label="Ebene ${lvl} entfernen">Ebene ${lvl} entfernen</button>` : ""}
+      ${roleRows(s, cp, c, true)}
+      <div class="edrow two" style="margin-bottom:10px">${inp(`${key}.name`, s.name, "Themenname")}${inp(`${key}.note`, s.note||"", "Zusatz (optional)")}</div>${kursSel(key, s)}
+      <div class="prio">${DISZ.map((d,i)=>{
+        const cur = s.prio[i];
+        const opts = PRIO_OPTS.some(o=>o[0]===cur) ? PRIO_OPTS : [[cur,cur], ...PRIO_OPTS];
+        return `<div class="${d.id===state.disz?"sel":""}" title="${d.label}">${d.label}<br>
+          <select class="ed sm prio-sel" data-path="${key}.prio.${i}">${opts.map(o=>`<option value="${esc(o[0])}" ${o[0]===cur?"selected":""}>${esc(o[1])}</option>`).join("")}</select></div>`;
+      }).join("")}</div>
+      ${FIELDS.map(f=>fieldEdit(f, c.details, `${cp}.details`, cp, s)).join("")}</div>`;
+  }
+  const c = cur(s);
+  const lead = roleRows(s, `${key}.byDisz.${state.disz}`, c, false);
+  return `<div class="lvlcol ${cls}${state.edit && !mayEdit ? " readonly" : ""}">${head}${state.edit && !mayEdit ? `<div class="ronote">Nur Ansicht – nicht dein Bereich</div>` : ""}<div class="tname">${s.note?esc(s.note):"&nbsp;"}</div>
+    <div class="prio">${DISZ.map((d,i)=>`<div class="${d.id===state.disz?"sel":""}" title="${d.label}">${d.label}<br>${badge(s.prio[i])}</div>`).join("")}</div>${lead}
+    ${FIELDS.map(f=>fieldView(f, c.details, c.assign?.fields?.[f.id])).join("")}</div>`;
+}
+
+const curTopic = () => state.open === KURS_ID ? DATA[state.modul] : DATA[state.modul].topics.find(x=>x.id===state.open);
+/* Kurse: entweder ein Kurs pro Stufe × Disziplin (courses) oder gemeinsame Kurse über kursMap/kurse
+   (z. B. On-Snow Talent: Allround für alle + Cluster-Kurs Race/Freestyle/Nordisch) */
+function courseEntries(key){
+  const m = DATA[state.modul];
+  if (m.kursMap && m.kursMap[key]){
+    m.kurse = m.kurse || {};
+    return (m.kursMap[key][state.disz] || []).map(id => { const o = m.kurse[id] = m.kurse[id] || {}; o.details = o.details || {}; return {id, path:`kurse.${id}`, obj:o, name:o.name || id}; });
+  }
+  const o = cur(courses()[key]); o.details = o.details || {};
+  return [{id:"", path:`courses.${key}.byDisz.${state.disz}`, obj:o, name:o.name || (key === "talent" ? `J+S Modul ${m.label} Talent` : `Modul ${m.label}`)}];
+}
+function courseEntriesFor(key, area){
+  const m = DATA[state.modul], spec = area && m.areaKurs && m.areaKurs[area];
+  if (!spec) return courseEntries(key);
+  const id = spec[key]; if (!id) return [];
+  if (id === "*") return courseEntries(key);
+  m.kurse = m.kurse || {}; const o = m.kurse[id] = m.kurse[id] || {}; o.details = o.details || {};
+  return [{id, path:`kurse.${id}`, obj:o, name:o.name || id}];
+}
+function courseName(key){ const es = courseEntries(key); return es.length > 1 ? es.map(e => e.name).join(" / ") : es[0]?.name || ""; }
+function nodeAssigned(o){
+  const as = o && o.assign; if (!as) return [];
+  const a = [...(as.lead||[]), ...(as.ref||[])];
+  Object.values(as.fields||{}).forEach(f => (f.people||[]).forEach(p => a.push(p)));
+  return a;
+}
+function kursScope(key, id){
+  const map = DATA[state.modul].kursMap[key];
+  const ds = DISZ.filter(d => (map[d.id]||[]).includes(id));
+  return ds.length === DISZ.length ? "alle Sportarten" : ds.map(d => d.label).join(", ");
+}
+/* Zuordnung Thema -> Kurs (nur wenn eine Stufe mehrere Kurse hat) */
+function kursOpts(key){
+  const m = DATA[state.modul]; if (!m.kursSelect || !m.kursMap || !m.kursMap[key]) return null;
+  const lists = DISZ.map(d => m.kursMap[key][d.id] || []);
+  const common = lists[0].filter(id => lists.every(l => l.includes(id)));
+  const hasOwn = lists.some(l => l.some(id => !common.includes(id)));
+  if (common.length + (hasOwn ? 1 : 0) < 2) return null;
+  return [...common.map(id => [id, m.kurse?.[id]?.name || id]), ...(hasOwn ? [["cluster", "Cluster-Kurs (je nach Sportart)"]] : [])];
+}
+function kursLabel(key, s){
+  const o = kursOpts(key); if (!o || !s.kurs) return "";
+  const m = DATA[state.modul];
+  if (s.kurs !== "cluster") return m.kurse?.[s.kurs]?.name || s.kurs;
+  return (m.kursMap[key][state.disz] || []).filter(id => !o.some(x => x[0] === id)).map(id => m.kurse?.[id]?.name || id).join(", ");
+}
+function kursSel(key, s){
+  const o = kursOpts(key); if (!o) return "";
+  const v = s.kurs || "";
+  return `<div class="edrow kurssel"><label class="edlbl">Kurs</label><select class="ed sm" data-path="${key}.kurs">
+    <option value="" ${v===""?"selected":""}>– Kurs wählen –</option>${o.map(x => `<option value="${esc(x[0])}" ${x[0]===v?"selected":""}>${esc(x[1])}</option>`).join("")}</select></div>`;
+}
+function courseCol(key, lvl, cls){
+  const SC = DATA.meta.scope;
+  const mayEdit = !SC || (SC.levels.includes(key) && SC.disz.includes(state.disz));
+  const es = courseEntriesFor(key, state.kursArea), multi = es.length > 1;
+  const AK = DATA[state.modul].areaKurs;
+  const areaDriven = id => AK && Object.values(AK).some(v => v.talent === id);
+  const head = `<h3><span class="tag">${lvl}</span><span class="nm">${esc(DISZ[dIdx()].label)}</span></h3>`;
+  const block = e => {
+    const sub = `<div class="kursname">${esc(e.name)}${multi && e.id ? `<span class="kscope">${esc(kursScope(key, e.id))}</span>` : ""}</div>`;
+    if (state.edit && mayEdit) return `<div class="kursblock">${!SC && !areaDriven(e.id) ? `<label class="edlbl">Kursname${multi && e.id ? ` · ${esc(kursScope(key, e.id))}` : ""}</label><div class="edrow" style="margin-bottom:12px">${inp(`${e.path}.name`, e.obj.name || "", e.name)}</div>` : sub}${COURSE_FIELDS.map(f=>fieldEdit(f, e.obj.details, `${e.path}.details`, e.path, null, e.obj)).join("")}</div>`;
+    return `<div class="kursblock">${sub}${COURSE_FIELDS.map(f=>fieldView(f, e.obj.details, e.obj.assign?.fields?.[f.id])).join("")}</div>`;
+  };
+  return `<div class="lvlcol ${cls}${state.edit && !mayEdit ? " readonly" : ""}">${head}${state.edit && !mayEdit ? `<div class="ronote">Nur Ansicht – nicht dein Bereich</div>` : ""}${es.length ? es.map(block).join("") : `<div class="notpart">Für diesen Bereich gibt es auf der Ebene <b>${lvl}</b> keinen eigenen Kurs.</div>`}</div>`;
+}
+function openCourse(originEl){
+  const AD = DATA[state.modul].areaDisz;
+  if (state.kursArea && AD && AD[state.kursArea] && !AD[state.kursArea].includes(state.disz)) return closeTopic();
+  state.open = KURS_ID;
+  const p = $("#panel");
+  const keepScroll = !originEl && p.querySelector(".panel-body") ? p.querySelector(".panel-body").scrollTop : 0;
+  if (originEl){
+    const r = originEl.getBoundingClientRect();
+    p.style.setProperty("--ox", (r.left + r.width/2 - 24) + "px");
+    p.style.setProperty("--oy", (r.top + r.height/2 - 24) + "px");
+  }
+  p.innerHTML = `
+    <div class="panel-head">
+      <div style="min-width:0"><div class="crumb">Übergreifend${state.kursArea ? " · " + esc(state.kursArea) : ""}${state.edit?' · <span class="editbadge">Bearbeitungsmodus</span>':''}</div><h2 id="pTitle">Vorbereitungsauftrag &amp; Prüfungen</h2>
+        <div class="seg ptabs">${DISZ.map(d=>`<button data-d="${d.id}" aria-pressed="${state.disz===d.id}">${d.label}</button>`).join("")}</div></div>
+      <div class="navbtns">
+        <button class="pill ${state.edit?"on":""}" data-toggle-edit>${state.edit?"Fertig":"Bearbeiten"}</button>
+        ${state.edit || state.dirty ? `<button class="pill save" data-save ${state.dirty?"":"disabled"}>Speichern</button>` : ""}
+        <button class="close" data-close>Schliessen ✕</button>
+      </div>
+    </div>
+    <div class="panel-body">
+      ${courseCol("talent","Talent","t")}
+      ${courseCol("ls","Leistungssport","ls")}
+    </div>`;
+  if (originEl){ p.style.animation="none"; p.offsetHeight; p.style.animation=""; }
+  else { p.style.animation="none"; p.querySelector(".panel-body").scrollTop = keepScroll; }
+  $("#overlay").classList.add("open");
+  $("#overlay").setAttribute("aria-hidden","false");
+  p.querySelectorAll("textarea.ed").forEach(autosize);
+  if (originEl) p.querySelector("[data-close]").focus();
+}
+function getAt(obj, path){ return path.split(".").reduce((o,k)=> o == null ? o : o[k], obj); }
+function setAt(obj, path, val){
+  const ks = path.split(".");
+  let o = obj;
+  ks.slice(0,-1).forEach((k,i) => {
+    if (o[k] == null || typeof o[k] !== "object") o[k] = /^\d+$/.test(ks[i+1]) ? [] : {};
+    if (typeof o[k] === "string") o[k] = {x:o[k]};
+    o = o[k];
+  });
+  const last = ks[ks.length-1];
+  if (Array.isArray(o) && typeof o[last] === "string" && /^\d+$/.test(last)) { o[last] = val; return; }
+  if (val === "" && (last === "disz" || last === "note")) delete o[last]; else o[last] = val;
+}
+function markDirty(){
+  state.dirty = true;
+  renderStatus();
+  if (window.LZB) { LZB.schedule(); return; }
+  try { localStorage.setItem(DRAFT_KEY, JSON.stringify({base: DATA.meta.savedAt || null, at: Date.now(), data: DATA})); } catch(e){}
+}
+
+function openTopic(id, originEl){
+  if (id === KURS_ID) { if (originEl && originEl.dataset) state.kursArea = originEl.dataset.karea || null; return openCourse(originEl); }
+  state.open = id;
+  const list = visibleTopics();
+  const t = curTopic();
+  const idx = list.findIndex(x=>x.id===id);
+  const title = t.talent && t.ls && t.talent.name !== t.ls.name ? `${t.talent.name} → ${t.ls.name}` : (t.talent||t.ls).name;
+  const p = $("#panel");
+  const keepScroll = !originEl && p.querySelector(".panel-body") ? p.querySelector(".panel-body").scrollTop : 0;
+  if (originEl){
+    const r = originEl.getBoundingClientRect();
+    p.style.setProperty("--ox", (r.left + r.width/2 - 24) + "px");
+    p.style.setProperty("--oy", (r.top + r.height/2 - 24) + "px");
+  }
+  p.innerHTML = `
+    <div class="panel-head">
+      <div style="min-width:0"><div class="crumb">${t.area ? esc(t.area) + " · " : ""}Thema ${idx+1} / ${list.length}${state.edit?' · <span class="editbadge">Bearbeitungsmodus</span>':''}</div><h2 id="pTitle">${esc(title)}</h2>
+        <div class="seg ptabs">${DISZ.map(d=>`<button data-d="${d.id}" aria-pressed="${state.disz===d.id}">${d.label}</button>`).join("")}</div></div>
+      <div class="navbtns">
+        <button data-nav="-1" aria-label="Vorheriges Thema" ${idx<=0?"disabled":""}>←</button>
+        <button data-nav="1" aria-label="Nächstes Thema" ${idx>=list.length-1?"disabled":""}>→</button>
+        ${state.edit && !DATA.meta.scope ? `<button class="mini del" data-deltopic data-label="Thema löschen">Thema löschen</button>` : ""}
+        <button class="pill ${state.edit?"on":""}" data-toggle-edit>${state.edit?"Fertig":"Bearbeiten"}</button>
+        ${state.edit || state.dirty ? `<button class="pill save" data-save ${state.dirty?"":"disabled"}>Speichern</button>` : ""}
+        <button class="close" data-close>Schliessen ✕</button>
+      </div>
+    </div>
+    <div class="panel-body">
+      ${state.edit && !DATA.meta.scope ? `<div class="arearow"><span class="edlbl">Themenbereich</span><select class="ed sm" data-path="area">${areas().map(a=>`<option ${a===t.area?"selected":""}>${esc(a)}</option>`).join("")}</select></div>` : ""}
+      ${levelCol(t,"talent","Talent","t")}
+      ${levelCol(t,"ls","Leistungssport","ls")}
+    </div>`;
+  if (originEl){ p.style.animation="none"; p.offsetHeight; p.style.animation=""; }
+  else { p.style.animation="none"; p.querySelector(".panel-body").scrollTop = keepScroll; }
+  $("#overlay").classList.add("open");
+  $("#overlay").setAttribute("aria-hidden","false");
+  p.querySelectorAll("textarea.ed").forEach(autosize);
+  if (originEl) p.querySelector("[data-close]").focus();
+}
+function autosize(t){ t.style.height = "auto"; t.style.height = (t.scrollHeight + 2) + "px"; }
+function closeTopic(){
+  state.open = null;
+  $("#overlay").classList.remove("open");
+  $("#overlay").setAttribute("aria-hidden","true");
+  renderGrid();
+}
+function nav(dir){
+  if (state.open === KURS_ID) return;
+  const list = visibleTopics();
+  const i = list.findIndex(x=>x.id===state.open) + dir;
+  if (list[i]) openTopic(list[i].id);
+}
+function toggleEdit(){
+  if (window.LZ_READONLY) return;
+  state.edit = !state.edit;
+  renderControls(); renderGrid();
+  if (state.open) openTopic(state.open);
+}
+
+/* ---------- Speichern ---------- */
+function fileName(){
+  try { const n = decodeURIComponent(location.pathname.split("/").pop() || ""); if (/\.html?$/i.test(n)) return n; } catch(e){}
+  return "Lernziele_OffSnow_Talent_vs_Leistungssport.html";
+}
+function buildHtml(){
+  const clone = document.documentElement.cloneNode(true);
+  clone.querySelector("#lz-data").textContent = JSON.stringify(DATA, null, 1).replace(/</g, "\\u003c");
+  ["#grid","#summary","#panel","#segDisz","#draftBar","#personSel","#scopeBar"].forEach(s => { const n = clone.querySelector(s); if (n) n.innerHTML = ""; });
+  clone.querySelector("#overlay").classList.remove("open");
+  clone.querySelector("#draftBar")?.setAttribute("hidden","");
+  clone.querySelector("body").classList.remove("editing");
+  return "<!doctype html>\n" + clone.outerHTML;
+}
+async function save(){
+  if (window.LZB) return LZB.flush();
+  const prev = DATA.meta.savedAt;
+  DATA.meta.savedAt = new Date().toISOString();
+  const html = buildHtml();
+  try {
+    if (window.showSaveFilePicker){
+      if (!fileHandle){
+        fileHandle = await window.showSaveFilePicker({suggestedName: fileName(), types:[{description:"HTML-Datei", accept:{"text/html":[".html"]}}]});
+      }
+      const w = await fileHandle.createWritable(); await w.write(html); await w.close();
+      toast("Gespeichert in «" + fileHandle.name + "»");
+    } else {
+      const a = document.createElement("a");
+      a.href = URL.createObjectURL(new Blob([html], {type:"text/html"}));
+      a.download = fileName(); document.body.appendChild(a); a.click(); a.remove();
+      setTimeout(()=>URL.revokeObjectURL(a.href), 4000);
+      toast("Neue Version heruntergeladen – ersetze damit die alte Datei.");
+    }
+  } catch(e){
+    DATA.meta.savedAt = prev;
+    if (e && e.name === "AbortError") return;
+    toast("Speichern fehlgeschlagen: " + (e && e.message || e));
+    return;
+  }
+  state.dirty = false;
+  try { localStorage.removeItem(DRAFT_KEY); } catch(e){}
+  renderStatus();
+}
+let toastT;
+function toast(msg){
+  const t = $("#toast"); t.textContent = msg; t.classList.add("show");
+  clearTimeout(toastT); toastT = setTimeout(()=>t.classList.remove("show"), 3500);
+}
+function checkDraft(){
+  if (window.LZB || window.LZ_STATIC) return;
+  let d = null;
+  try { d = JSON.parse(localStorage.getItem(DRAFT_KEY) || "null"); } catch(e){}
+  if (!d || !d.data) return;
+  if ((d.base || null) !== (DATA.meta.savedAt || null) || JSON.stringify(d.data) === JSON.stringify(DATA)) {
+    try { localStorage.removeItem(DRAFT_KEY); } catch(e){}
+    return;
+  }
+  const bar = $("#draftBar");
+  bar.hidden = false;
+  bar.innerHTML = `<span>Es gibt nicht gespeicherte Änderungen vom ${new Date(d.at).toLocaleString("de-CH",{dateStyle:"medium",timeStyle:"short"})}.</span>
+    <button class="pill on" data-draft="restore">Wiederherstellen</button><button class="pill" data-draft="discard">Verwerfen</button>`;
+  bar.dataset.draft = JSON.stringify(d.data);
+}
+
+/* ---------- Events ---------- */
+document.addEventListener("click", e => {
+  const d = e.target.closest("[data-d]"); if (d){
+    state.disz=d.dataset.d; renderControls(); renderGrid();
+    if (state.open){ if (state.open === KURS_ID || visibleTopics().some(x=>x.id===state.open)) openTopic(state.open); else closeTopic(); }
+    return; }
+  if (e.target.closest("#editToggle") || e.target.closest("[data-toggle-edit]")) { toggleEdit(); return; }
+  if (e.target.closest("#saveBtn") || e.target.closest("[data-save]")) { save(); return; }
+  const dr = e.target.closest("[data-draft]");
+  if (dr){
+    const bar = $("#draftBar");
+    if (dr.dataset.draft === "restore"){
+      const nd = JSON.parse(bar.dataset.draft);
+      Object.keys(DATA).forEach(k=>delete DATA[k]); Object.assign(DATA, nd);
+      state.dirty = true; renderControls(); renderGrid();
+    } else { try { localStorage.removeItem(DRAFT_KEY); } catch(_){} }
+    bar.hidden = true; return;
+  }
+  const un = e.target.closest("[data-unpick]");
+  if (un){
+    const arr = getAt(curTopic(), un.dataset.unpick);
+    if (Array.isArray(arr)) { arr.splice(+un.dataset.i, 1); markDirty(); openTopic(state.open); renderControls(); }
+    return;
+  }
+  const add = e.target.closest("[data-add]");
+  if (add){
+    const t = curTopic(), path = add.dataset.add;
+    let arr = getAt(t, path); if (!Array.isArray(arr)) { setAt(t, path + ".0", null); arr = getAt(t, path); arr.length = 0; }
+    const k = add.dataset.kind;
+    arr.push(k === "link" ? {label:"", url:""} : k === "komp" ? {t:"", s:"", x:""} : k === "frage" ? {x:""} : "");
+    markDirty(); openTopic(state.open);
+    const ins = $("#panel").querySelectorAll(`[data-path^="${path}.${arr.length-1}"]`); if (ins[0]) ins[0].focus();
+    return;
+  }
+  const del = e.target.closest("[data-del]");
+  if (del){
+    const arr = getAt(curTopic(), del.dataset.del);
+    if (Array.isArray(arr)) { arr.splice(+del.dataset.i, 1); markDirty(); openTopic(state.open); }
+    return;
+  }
+  if (e.target.closest("[data-addarea]")) { addArea(); return; }
+  const at = e.target.closest("[data-addtopic]"); if (at){ addTopic(at.dataset.addtopic); return; }
+  const da = e.target.closest("[data-delarea]"); if (da){ delArea(da.dataset.delarea); return; }
+  const dt = e.target.closest("[data-deltopic]");
+  if (dt){ if (!armed(dt, "Wirklich löschen?")) return;
+    const T = DATA[state.modul].topics; T.splice(T.findIndex(x => x.id === state.open), 1); markDirty(); closeTopic(); toast("Thema gelöscht"); return; }
+  const as = e.target.closest("[data-addside]"); if (as){ curTopic()[as.dataset.addside] = newSide(); markDirty(); openTopic(state.open); renderGrid(); return; }
+  const ds = e.target.closest("[data-delside]");
+  if (ds){ if (!armed(ds, "Wirklich entfernen? Alle Inhalte dieser Ebene gehen verloren")) return;
+    delete curTopic()[ds.dataset.delside]; markDirty(); openTopic(state.open); renderGrid(); return; }
+  if (e.target.closest(".ed")) return;
+  const r = e.target.closest("tr.row"); if (r){ openTopic(r.dataset.id, r); return; }
+  const n = e.target.closest("[data-nav]"); if (n){ nav(+n.dataset.nav); return; }
+  if (e.target.closest("[data-close]") || e.target.id === "overlay") closeTopic();
+});
+function pickMatches(q, path){
+  const have = getAt(curTopic(), path) || [];
+  q = q.trim().toLowerCase();
+  return POOL.filter(p => !have.includes(p.id) && (!q || p.name.toLowerCase().includes(q))).slice(0, 8);
+}
+function showDD(input){
+  const pk = input.closest(".picker"), dd = pk.querySelector(".pick-dd");
+  const m = pickMatches(input.value, pk.dataset.ppath);
+  dd.innerHTML = m.map((p,i) => `<div class="dd-it${i===0?" act":""}" data-pick="${esc(p.id)}">
+      ${esc(p.name)}</div>`).join("")
+    + (input.value.trim() ? `<div class="dd-it ext" data-pick="x:${esc(input.value.trim())}">«${esc(input.value.trim())}» hinzufügen (nicht im Pool)</div>` : "");
+  dd.hidden = !dd.innerHTML;
+}
+function addPerson(path, pid){
+  const t = curTopic();
+  let arr = getAt(t, path);
+  if (!Array.isArray(arr)) { setAt(t, path + ".0", pid); }
+  else if (!arr.includes(pid)) arr.push(pid);
+  markDirty(); openTopic(state.open); renderControls();
+  const pin = $("#panel").querySelector(`.picker[data-ppath="${path}"] .pick-in`); if (pin) { state.noDD = true; pin.focus(); state.noDD = false; }
+}
+document.addEventListener("click", e => { const b = e.target.closest("[data-kk]"); if (b) addPerson(b.dataset.kk, KK); });
+document.addEventListener("change", e => { if (e.target.matches(".areaname")) renameArea(e.target); });
+document.addEventListener("focusin", e => { if (e.target.matches(".pick-in") && !state.noDD) showDD(e.target); });
+document.addEventListener("focusout", e => { if (e.target.matches(".pick-in")) setTimeout(()=>{ const dd = e.target.closest(".picker")?.querySelector(".pick-dd"); if (dd) dd.hidden = true; }, 150); });
+document.addEventListener("mousedown", e => {
+  const it = e.target.closest("[data-pick]"); if (!it) return;
+  e.preventDefault();
+  addPerson(it.closest(".picker").dataset.ppath, it.dataset.pick);
+});
+document.addEventListener("input", e => {
+  if (e.target.matches(".pick-in")) { showDD(e.target); return; }
+  const el = e.target.closest("[data-path]"); if (!el || !state.open) return;
+  setAt(curTopic(), el.dataset.path, el.value);
+  if (el.tagName === "TEXTAREA") autosize(el);
+  markDirty();
+  if (el.classList.contains("prio-sel") || el.dataset.path === "area") { openTopic(state.open); renderGrid(); }
+});
+document.addEventListener("keydown", e => {
+  if ((e.ctrlKey || e.metaKey) && e.key.toLowerCase() === "s") { e.preventDefault(); if (state.dirty) save(); return; }
+  if (e.target.matches(".pick-in")){
+    const dd = e.target.closest(".picker").querySelector(".pick-dd");
+    const items = [...dd.querySelectorAll("[data-pick]")]; let a = items.findIndex(x=>x.classList.contains("act"));
+    if (e.key === "ArrowDown" || e.key === "ArrowUp"){ e.preventDefault(); if (!items.length) return; items[a]?.classList.remove("act"); a = (a + (e.key==="ArrowDown"?1:-1) + items.length) % items.length; items[a].classList.add("act"); return; }
+    if (e.key === "Enter"){ e.preventDefault(); const it = items[a] || items[0]; if (it) addPerson(e.target.closest(".picker").dataset.ppath, it.dataset.pick); return; }
+    if (e.key === "Escape"){ dd.hidden = true; e.stopPropagation(); return; }
+    if (e.key === "Backspace" && !e.target.value){ const btns = e.target.closest(".picker").querySelectorAll("[data-unpick]"); if (btns.length) btns[btns.length-1].click(); return; }
+  }
+  if (e.target.matches(".areaname") && e.key === "Enter") { e.target.blur(); return; }
+  const typing = e.target.matches("input, textarea, select");
+  if (state.open){
+    if (e.key === "Escape") closeTopic();
+    if (!typing && e.key === "ArrowRight") nav(1);
+    if (!typing && e.key === "ArrowLeft") nav(-1);
+  } else if (e.key === "Enter" && e.target.matches("tr.row")) openTopic(e.target.dataset.id, e.target);
+});
+$("#personSel").addEventListener("change", e => { state.person = e.target.value; renderGrid(); });
+window.addEventListener("beforeunload", e => { if (state.dirty) { e.preventDefault(); e.returnValue = ""; } });
+
+if (DATA.meta.scope){
+  const SC = DATA.meta.scope;
+  state.disz = SC.start || SC.disz[0];
+  const b = $("#scopeBar"); b.hidden = false;
+  b.innerHTML = `<b>Version für ${esc(SC.name)}</b> – bitte nur <b>${esc(SC.text)}</b> ausfüllen. Alle anderen Bereiche sind nur zum Ansehen. «Bearbeiten» einschalten, Thema öffnen, ausfüllen, «Speichern» und die Datei zurückschicken.`;
+}
+renderControls(); renderGrid(); checkDraft();
+</script>
+<script>
+(function(){
+  const MODS = [["offsnow", "OffSnow", "Off-Snow"], ["coaching", "Coaching", "Coaching"], ["onsnow", "OnSnow", "On-Snow"]];
+  const q = (location.search.match(/[?&]m=([a-z]+)/) || [])[1];
+  const m = MODS.find(x => x[0] === q) || MODS[0];
+  window.LZ_STATIC = true; window.LZ_READONLY = true;
+  document.body.classList.add("static", "readonly");
+  document.title = "Lernziele " + m[2];
+  const tabs = document.getElementById("modTabs");
+  tabs.innerHTML = MODS.map(x => '<a href="?m=' + x[0] + '"' + (x === m ? ' aria-current="page"' : '') + '>' + x[2] + '</a>').join("");
+  document.querySelector("header h1").textContent = m[2] + " Talent vs. Leistungssport";
+  fetch("data/" + m[0] + ".json", {cache: "no-cache"}).then(r => { if (!r.ok) throw 0; return r.json(); }).then(D => {
+    window.LZ_STAND = D.meta && D.meta.stand;
+    document.getElementById("lz-data").textContent = JSON.stringify(D).replace(/</g, "\\u003c");
+    const s = document.createElement("script");
+    s.textContent = document.getElementById("lz-app").textContent;
+    document.getElementById("lzBoot").remove();
+    document.body.appendChild(s);
+  }).catch(() => { document.getElementById("lzBoot").innerHTML = "<b>Die Lernziele konnten nicht geladen werden.</b> Bitte später erneut versuchen."; });
+})();
+</script>
+</body>
+</html>
